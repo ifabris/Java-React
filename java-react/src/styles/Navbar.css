@@ -1,0 +1,31 @@
+/* Navbar styles */
+.navbar {
+  padding: 10px 0;
+}
+
+.navbar-nav .nav-item .nav-link {
+  color: #fff;
+  font-size: 16px;
+  padding: 10px 15px;
+  text-decoration: none;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.navbar-nav .nav-item .nav-link:hover,
+.navbar-nav .nav-item .btn-outline-light.nav-link:hover {
+  background-color: #555;
+  color: #fff;
+}
+
+.navbar-brand {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.navbar-toggler {
+  border: none;
+}
+
+.navbar-toggler-icon {
+  color: #fff;
+}
