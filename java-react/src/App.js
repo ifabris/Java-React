@@ -16,6 +16,7 @@ import PurchasePage from './components/PurchasePage';
 import CategoriesDashboard from './components/CategoryDashboard';
 import InvoicesPage from './components/InvoicesPage';
 import ProtectedRoute from './components/ProtectedRoute'; 
+import AuthenticatedRoute from './components/AuthenticatedRoute';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -32,8 +33,8 @@ function App() {
             <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
             <Route path="/add-category" element={<ProtectedRoute><AddCategory /></ProtectedRoute>} />
             <Route path="/landing" element={<LandingPage />} />
-            <Route path="/cart" element={<CartPage />} />
-            <Route path="/purchase" element={<PurchasePage />} />
+            <Route path="/cart" element={<AuthenticatedRoute><CartPage /></AuthenticatedRoute>} />
+            <Route path="/purchase" element={<AuthenticatedRoute><PurchasePage /></AuthenticatedRoute>} />
             <Route path="/category" element={<ProtectedRoute><CategoriesDashboard /></ProtectedRoute>} />
             <Route path="/invoices" element={<ProtectedRoute><InvoicesPage /></ProtectedRoute>} />
           </Routes>

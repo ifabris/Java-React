@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -7,6 +6,7 @@ import { faEdit, faTrash, faPlus, faSearch, faRedo } from '@fortawesome/free-sol
 import '../styles/AdminDashboard.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useTranslation } from 'react-i18next';
+import api from '../services/api'
 
 
 Modal.setAppElement('#root');
@@ -37,7 +37,7 @@ const AdminDashboard = () => {
   const fetchProducts = () => {
     const token = localStorage.getItem('jwtToken'); 
 
-    axios.get('http://localhost:8080/products', {
+    api.get('/products', {
         headers: {
             Authorization: `Bearer ${token}`
         }
@@ -55,7 +55,7 @@ const AdminDashboard = () => {
 
   const fetchCategories = () => {
     const token = localStorage.getItem('jwtToken');
-    axios.get('http://localhost:8080/categories', {
+    api.get('/categories', {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -94,7 +94,7 @@ const AdminDashboard = () => {
   const handleSaveNewProduct = (event) => {
     event.preventDefault();
     const token = localStorage.getItem('jwtToken');
-    axios.post('http://localhost:8080/products', newProduct, {
+    api.post('/products', newProduct, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -120,7 +120,7 @@ const AdminDashboard = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const token = localStorage.getItem('jwtToken');
-    axios.put(`http://localhost:8080/products/${editProduct.id}`, editProduct, {
+    api.put(`/products/${editProduct.id}`, editProduct, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -141,7 +141,7 @@ const AdminDashboard = () => {
 
   const confirmDelete = () => {
     const token = localStorage.getItem('jwtToken');
-    axios.delete(`http://localhost:8080/products/${productToDelete.id}`, {
+    api.delete(`/products/${productToDelete.id}`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -159,7 +159,7 @@ const AdminDashboard = () => {
   const handleSearch = async () => {
     try {
       const token = localStorage.getItem('jwtToken');
-      const response = await axios.get(`http://localhost:8080/products/${searchId}`, {
+      const response = await api.get(`/products/${searchId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -276,29 +276,29 @@ const AdminDashboard = () => {
                     />
                 </div>
                 <div className="form-group">
-                    <label>{t('category')}</label>
-                    <select
-                        className="form-control"
-                        value={newProduct.category.id}
-                        onChange={e => {
-                            const selectedCategory = categories.find(cat => cat.id === Number(e.target.value));
-                            setNewProduct({
-                                ...newProduct,
-                                category: {
-                                    id: selectedCategory.id,
-                                    name: selectedCategory.name
-                                }
-                            });
-                        }}
-                    >
-                        <option value="">{t('select_category')}</option>
-                        {categories.map(category => (
-                            <option key={category.id} value={category.id}>
-                                {category.name}
-                            </option>
-                        ))}
-                    </select>
-                </div>
+    <label>{t('category')}</label>
+    <select
+        className="form-control"
+        value={newProduct.category.id || (categories.length > 0 ? categories[0].id : '')}
+        onChange={e => {
+            const selectedCategory = categories.find(cat => cat.id === Number(e.target.value));
+            setNewProduct({
+                ...newProduct,
+                category: {
+                    id: selectedCategory?.id,
+                    name: selectedCategory?.name
+                }
+            });
+        }}
+    >
+        {categories.map((category, index) => (
+            <option key={category.id} value={category.id}>
+                {category.name}
+            </option>
+        ))}
+    </select>
+</div>
+
                 <button type="submit" className="btn btn-success">{t('add_product')}</button>
             </form>
         )}
